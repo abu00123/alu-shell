@@ -1,18 +1,23 @@
 #!/usr/bin/env bash
-# script that creates a file, displays text indefinitely, and catches signals
+# Path to the PID file
+PID_FILE="/var/run/myscript.pid"
 
-function remove_kill {
-    rm -f /var/run/myscript.pid
-    exit
+# Function to clean up PID file
+cleanup() {
+    rm -f "$PID_FILE"
+    exit 0
 }
 
-echo $$ > /var/run/myscript.pid
-trap 'echo "I hate the kill command"; remove_kill' SIGTERM
-trap 'echo "Y U no love me?!"; remove_kill' SIGINT
-trap 'remove_kill' SIGQUIT
+# Trap SIGTERM and SIGQUIT to clean up and exit
+trap 'echo "I hate the kill command"; cleanup' SIGTERM
+trap 'cleanup' SIGQUIT
+trap 'echo "Y U no love me?!"' SIGINT
 
-while true;
-do
-	echo "To infinity and beyond"
-	sleep 3
+# Create the PID file with the current process PID
+echo $$ > "$PID_FILE"
+
+# Display "To infinity and beyond" indefinitely
+while true; do
+    echo "To infinity and beyond"
+    sleep 1
 done
