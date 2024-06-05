@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+OUTPUT_FILE="/tmp/my_process"
+while true; do
+    echo "I am alive!" >> "$OUTPUT_FILE"
+    sleep 2
+done
